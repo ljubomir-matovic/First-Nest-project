@@ -1,9 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import 'dotenv/config';
 import { ProductsModule } from './products/products.module';
+import { AdminModule } from './admin/admin.module';
+import { Product } from './models/products/product.entity';
+import { ProductsService } from './models/products/products.service';
 const env = process.env;
+@Global()
 @Module({
     imports: [
         TypeOrmModule.forRoot({
@@ -15,8 +19,12 @@ const env = process.env;
             database: env.DB_NAME,
             entities: ['dist/**/*.entity.js'],
         }),
-		ProductsModule
+        TypeOrmModule.forFeature([Product]),
+		ProductsModule,
+        AdminModule
     ],
     controllers: [AppController],
+    providers:[ProductsService],
+    exports:[ProductsService]
 })
 export class AppModule {}
