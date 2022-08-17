@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Item } from '../items/item.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -16,4 +17,16 @@ export class Product {
 
     @Column()
     price: number;
+
+    @OneToMany(() => Item, (item) => item.product)
+    items: Item[];
+
+    static sumPricesByQuantities(products: Product[], productsInSession): number {
+        let total = 0;
+        for (let i = 0; i < products.length; i++) {
+            total =
+                total + products[i].price * productsInSession[products[i].id];
+        }
+        return total;
+    }
 }

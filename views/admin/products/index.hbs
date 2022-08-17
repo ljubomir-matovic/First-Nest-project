@@ -6,6 +6,11 @@
             Create Products
         </div>
         <div class="card-body">
+            {{#if flashErrors}}
+            {{#each flashErrors}}
+            <p class="alert alert-danger">{{this}}</p>
+            {{/each}}
+            {{/if}}
             <form method="POST" action="/admin/products/store" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col">
@@ -64,8 +69,18 @@
                 <tr>
                     <td>{{id}}</td>
                     <td>{{name}}</td>
-                    <td>Edit</td>
-                    <td>Delete</td>
+                    <td>
+                        <a class="btn btn-primary" href="/admin/products/{{id}}">
+                            <i class="bi-pencil"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <form action="/admin/products/{{id}}" method="POST" id="delete-form">
+                            <button class="btn btn-danger">
+                                <i class="bi-trash"></i>
+                            </button>
+                        </form>
+                    </td>
                 </tr>
                 {{/each}}
             </tbody>
